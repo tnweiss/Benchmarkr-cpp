@@ -1,8 +1,17 @@
-############## Benchmarkr Library ##############
-add_library(benchmarkr STATIC
+########## Benchmarkr Static Library ##########
+add_executable(benchmarkr
 
-        benchmarkr.cpp
-        benchmarkr.h
-        )
+        main.cpp
+        help.cpp
+        init.cpp
+        upload.cpp
+        command.cpp
+        upload_watch.cpp
+        init-context.cpp
+)
 
-target_include_directories(benchmarkr PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
+# link to dependencies
+target_link_libraries(benchmarkr ${BM_LL} PRIVATE benchmarkr-common)
+
+# add precompiled headers
+target_precompile_headers(benchmarkr PUBLIC benchmarkr_pch.h)

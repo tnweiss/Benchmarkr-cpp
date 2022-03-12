@@ -1,2 +1,8 @@
-build
+build*
+cmake-build-*
+
 .idea
+dependencies/
+
+include/benchmarkr-common/benchmarkr/resolver/remote_config.h
+src/benchmarkr-common/benchmarkr/resolver/remote_config.cpp

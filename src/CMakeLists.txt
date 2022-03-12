@@ -1,7 +1,4 @@
-########## Benchmarkr Source ##########
-
-##### Common Library ####
+############## Benchmarkr Library ##############
+add_subdirectory(benchmarkr-common)
+add_subdirectory(benchmarkr-dev)
 add_subdirectory(benchmarkr)
-
-##### Library Tests ####
-add_subdirectory(test)
