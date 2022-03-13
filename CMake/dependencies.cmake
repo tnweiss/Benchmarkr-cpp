@@ -37,7 +37,7 @@ message(-----------------------------------------------------------)
 # 3 - benchmarkr        BM_LL
 
 if (UNIX)
-    set(LIBRARY_LINK_LIBRARIES "PRIVATE;uuid;${BM_COM_LL}")
+    set(BM_COM_LL "PRIVATE;uuid;${BM_COM_LL}")
 endif ()
 
 ####### Logging ##########
