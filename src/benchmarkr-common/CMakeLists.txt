@@ -1,5 +1,5 @@
 ########## Benchmarkr Static Library ##########
-add_library(benchmarkr-common
+add_library(benchmarkrCommon
     STATIC
         system.cpp
         system_lin.cpp
@@ -20,10 +20,10 @@ add_library(benchmarkr-common
 )
 
 # create the alias
-add_library(benchmarkr-common::benchmarkr-common ALIAS benchmarkr-common)
+add_library(benchmarkrCommon::benchmarkrCommon ALIAS benchmarkrCommon)
 
 # link to dependencies
-target_link_libraries(benchmarkr-common ${BM_COM_LL})
+target_link_libraries(benchmarkrCommon ${BM_COM_LL})
 
 # add precompiled headers
 target_precompile_headers(benchmarkr-common PUBLIC benchmarkr_common_pch.h)
