@@ -16,5 +16,5 @@ target_precompile_headers(benchmarkr_dev_unit_tests PRIVATE benchmarkr_dev_tests
 target_precompile_headers(benchmarkr_dev_integration_tests PRIVATE benchmarkr_dev_integration_test_pch.h)
 
 # link with the benchmarkr_dev library
-target_link_libraries(benchmarkr_dev_unit_tests PRIVATE benchmarkr-dev)
-target_link_libraries(benchmarkr_dev_integration_tests PRIVATE benchmarkr-dev)
+target_link_libraries(benchmarkr_dev_unit_tests PRIVATE benchmarkrDev)
+target_link_libraries(benchmarkr_dev_integration_tests PRIVATE benchmarkrDev)

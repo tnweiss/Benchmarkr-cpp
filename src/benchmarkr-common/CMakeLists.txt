@@ -26,4 +26,4 @@ add_library(benchmarkrCommon::benchmarkrCommon ALIAS benchmarkrCommon)
 target_link_libraries(benchmarkrCommon ${BM_COM_LL})
 
 # add precompiled headers
-target_precompile_headers(benchmarkr-common PUBLIC benchmarkr_common_pch.h)
+target_precompile_headers(benchmarkrCommon PUBLIC benchmarkr_common_pch.h)

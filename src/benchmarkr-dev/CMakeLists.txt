@@ -18,7 +18,7 @@ add_library(benchmarkrDev
 add_library(benchmarkrDev::benchmarkrDev ALIAS benchmarkrDev)
 
 # link to dependencies
-target_link_libraries(benchmarkrDev ${BM_DEV_LL} PRIVATE benchmarkr-common)
+target_link_libraries(benchmarkrDev ${BM_DEV_LL} PRIVATE benchmarkrCommon)
 
 # add precompiled headers
-target_precompile_headers(benchmarkr-dev PUBLIC benchmarkr_dev_pch.h)
+target_precompile_headers(benchmarkrDev PUBLIC benchmarkr_dev_pch.h)

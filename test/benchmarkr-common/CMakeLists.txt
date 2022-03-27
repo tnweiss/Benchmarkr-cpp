@@ -20,5 +20,5 @@ target_precompile_headers(benchmarkr_common_unit_tests PRIVATE benchmarkr_common
 target_precompile_headers(benchmarkr_common_root_unit_tests PRIVATE benchmarkr_common_tests_pch.h)
 
 # link with the benchmarkr_dev library
-target_link_libraries(benchmarkr_common_unit_tests PUBLIC benchmarkr-common)
-target_link_libraries(benchmarkr_common_root_unit_tests PUBLIC benchmarkr-common)
+target_link_libraries(benchmarkr_common_unit_tests PUBLIC benchmarkrCommon)
+target_link_libraries(benchmarkr_common_root_unit_tests PUBLIC benchmarkrCommon)

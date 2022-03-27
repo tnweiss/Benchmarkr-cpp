@@ -8,7 +8,7 @@ if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
     include(CMakePackageConfigHelpers)
 
     write_basic_package_version_file(
-        "${PROJECT_BINARY_DIR}/cmake/benchmarkr/ConfigVersion.cmake"
+        "${PROJECT_BINARY_DIR}/cmake/benchmarkr/benchmarkrConfigVersion.cmake"
         VERSION ${CMAKE_PROJECT_VERSION}
         COMPATIBILITY ExactVersion
     )
@@ -33,7 +33,7 @@ if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
 endif()
 
 ########## Install all Libraries ##########
-install(TARGETS benchmarkrDev elkClient spdlog cpr
+install(TARGETS benchmarkrDev spdlog
         EXPORT benchmarkrTargets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

@@ -7,5 +7,6 @@
 
 #include <thread>
 #include <chrono>
+#include <random>
 
 #endif //BENCHMARKR_COMMON_TESTS_PCH_H_
