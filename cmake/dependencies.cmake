@@ -9,7 +9,7 @@ endif()
 message("-- Using SPDLOG Version:                       ${SPDLOG_VERSION}")
 
 if(NOT DEFINED ELK_CLIENT_VERSION)
-    set(ELK_CLIENT_VERSION 0.0.9)
+    set(ELK_CLIENT_VERSION 0.0.11)
 endif()
 message("-- Using ELK_CLIENT_VERSION Version:           ${ELK_CLIENT_VERSION}")
 
@@ -62,10 +62,9 @@ if (NOT EXISTS ${CMAKE_CURRENT_LIST_DIR}/../dependencies/include/catch.hpp)
 endif()
 
 ####### ELK Client ##########
-#set(ELK_CLIENT_SKIP_TESTS true)
-#FetchContent_Declare(elkClient GIT_REPOSITORY https://github.com/tnweiss/elk-cpp.git GIT_TAG v${ELK_CLIENT_VERSION} EXCLUDE_FROM_ALL)
-#FetchContent_MakeAvailable(elkClient)
-find_package(elkClient 0.0.11 REQUIRED)
+set(ELK_CLIENT_SKIP_TESTS true)
+FetchContent_Declare(elkClient GIT_REPOSITORY https://github.com/tnweiss/elk-cpp.git GIT_TAG v${ELK_CLIENT_VERSION})
+FetchContent_MakeAvailable(elkClient)
 set(BM_LL "PRIVATE;elkClient;${BM_LL}")
 
 ####### Terminal Color ##########
