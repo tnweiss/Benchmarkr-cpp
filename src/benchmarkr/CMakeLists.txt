@@ -11,7 +11,7 @@ add_executable(benchmarkr
 )
 
 # link to dependencies
-target_link_libraries(benchmarkr ${BM_LL} PRIVATE benchmarkr-common)
+target_link_libraries(benchmarkr ${BM_LL} PRIVATE benchmarkrCommon)
 
 # add precompiled headers
 target_precompile_headers(benchmarkr PUBLIC benchmarkr_pch.h)

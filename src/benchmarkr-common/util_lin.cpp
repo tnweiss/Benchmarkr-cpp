@@ -35,7 +35,7 @@ std::string benchmarkr::uuid() {
   return {uuid_out};
 }
 
-void benchmarkr::env_set(std::string key, std::string val) {
+void benchmarkr::env_set(const std::string& key, const std::string& val) {
   setenv(key.c_str(), val.c_str(), 1);
 }
 #endif

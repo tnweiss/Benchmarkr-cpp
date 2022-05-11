@@ -4,5 +4,9 @@ cmake-build-*
 .idea
 dependencies/
 
+include/benchmarkr/version.h
+include/benchmarkr-common/version.h
+include/benchmarkr-dev/version.h
+
 include/benchmarkr-common/benchmarkr/resolver/remote_config.h
 src/benchmarkr-common/benchmarkr/resolver/remote_config.cpp
