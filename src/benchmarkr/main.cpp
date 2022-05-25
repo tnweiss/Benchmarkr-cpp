@@ -8,6 +8,7 @@
 #include "benchmarkr/help.h"
 #include "benchmarkr/init.h"
 #include "benchmarkr/init-context.h"
+#include "benchmarkr/print_version.h"
 
 /**
  * Select the proper command given the action command
@@ -24,6 +25,8 @@ static std::unique_ptr<benchmarkr::Command> command(const std::string& action) {
     return std::make_unique<benchmarkr::Upload>();
   } else if (action == "upload-watch") {
     return std::make_unique<benchmarkr::UploadWatch>();
+  } else if (action == "version") {
+    return std::make_unique<benchmarkr::PrintVersion>();
   } else {
     return std::make_unique<benchmarkr::Help>();
   }

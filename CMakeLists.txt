@@ -1,6 +1,6 @@
 ####### Project ##########
 cmake_minimum_required (VERSION 3.5)
-project(benchmarkr VERSION 0.0.2)
+project(benchmarkr VERSION 0.0.3)
 set(BENCHMARKR_COMMON_LIBRARY benchmarkrCommon)
 set(BENCHMARKR_DEV_LIBRARY benchmarkrDev)
 set(BENCHMARKR_EXECUTABLE benchmarkr)

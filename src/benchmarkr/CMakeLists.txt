@@ -7,6 +7,7 @@ add_executable(benchmarkr
         upload.cpp
         command.cpp
         upload_watch.cpp
+        print_version.cpp
         init-context.cpp
 )
 
