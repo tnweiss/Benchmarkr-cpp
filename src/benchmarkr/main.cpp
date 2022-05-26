@@ -7,8 +7,9 @@
 #include "benchmarkr/command.h"
 #include "benchmarkr/help.h"
 #include "benchmarkr/init.h"
-#include "benchmarkr/init-context.h"
+#include "benchmarkr/init_context.h"
 #include "benchmarkr/print_version.h"
+#include "benchmarkr/test_connection.h"
 
 /**
  * Select the proper command given the action command
@@ -27,6 +28,8 @@ static std::unique_ptr<benchmarkr::Command> command(const std::string& action) {
     return std::make_unique<benchmarkr::UploadWatch>();
   } else if (action == "version") {
     return std::make_unique<benchmarkr::PrintVersion>();
+  } else if (action == "test-connection") {
+    return std::make_unique<benchmarkr::TestConnection>();
   } else {
     return std::make_unique<benchmarkr::Help>();
   }

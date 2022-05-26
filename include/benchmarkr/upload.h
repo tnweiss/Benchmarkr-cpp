@@ -5,6 +5,7 @@
 #ifndef BENCHMARKR_INCLUDE_BENCHMARKR_UPLOAD_H_
 #define BENCHMARKR_INCLUDE_BENCHMARKR_UPLOAD_H_
 
+#include "benchmarkr-common/resolver/resolver.h"
 #include "command.h"
 
 #include "nlohmann/json.hpp"
@@ -20,7 +21,7 @@ std::vector<nlohmann::json> parse_results(const std::string& results_file_path, 
 class Upload: public Command {
  public:
   void execute(int argc, char* argv[]) const final;
-  [[nodiscard]] const char* help() const final;
+  [[nodiscard]] std::string help() const final;
 };
 
 }

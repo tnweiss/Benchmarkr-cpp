@@ -72,6 +72,9 @@ void benchmarkr::Results::write_results(benchmarkr::TestContext &test_context) c
     output_json[RESULTS_KEY].push_back(_result->as_json());
   }
 
+  // notify the user
+  std::cout << "Writing results to " << filepath << std::endl;
+
   // open the file
   std::ofstream results_file;
   results_file.open(filepath, std::ofstream::out);

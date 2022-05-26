@@ -18,7 +18,7 @@ class Command {
    * Get help text for the given command
    * @return
    */
-  [[nodiscard]] virtual const char* help() const = 0;
+  [[nodiscard]] virtual std::string help() const = 0;
 };
 
 /**

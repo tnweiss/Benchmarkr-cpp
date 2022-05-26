@@ -19,7 +19,7 @@ namespace benchmarkr {
 class UploadWatch: public Command {
  public:
   [[noreturn]] void execute(int argc, char* argv[]) const final;
-  [[nodiscard]] const char* help() const final;
+  [[nodiscard]] std::string help() const final;
 };
 
 }

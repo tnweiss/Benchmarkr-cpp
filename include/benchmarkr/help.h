@@ -9,12 +9,10 @@
 
 namespace benchmarkr {
 
-const char* help_text();
-
 class Help: public Command {
  public:
   void execute(int argc, char* argv[]) const final;
-  const char* help() const final;
+  [[nodiscard]] std::string help() const final;
 };
 
 }

@@ -1,7 +1,3 @@
-//
-// Created by tnwei on 3/8/2022.
-//
-
 #include "benchmarkr/command.h"
 
 void benchmarkr::set_log_level(const std::string& log_level) {

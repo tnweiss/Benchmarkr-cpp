@@ -1,82 +1,46 @@
-//
-// Created by tnwei on 3/8/2022.
-//
-
-#include <benchmarkr/upload_watch.h>
-
-#include "benchmarkr/upload.h"
-#include "benchmarkr-common/resolver/resolver.h"
-#include "benchmarkr-common/resolver/cli_args.h"
-#include "benchmarkr-common/resolver/default_resolver.h"
-#include "benchmarkr-common/resolver/environment_resolver.h"
-
+#include <chrono>
 #include "spdlog/spdlog.h"
 #include "nlohmann/json.hpp"
-#include <chrono>
-#include "elk/kibana/kibana_client.h"
+
+#include "benchmarkr-common/resolver/resolver.h"
+
+#include <benchmarkr/upload_watch.h>
+#include "benchmarkr/upload.h"
+#include <benchmarkr/variable_resolver.h>
+
+static const char* UPLOAD_WATCH_DESCRIPTION = "Upload all results to the remote elastic server at a given interval.";
+static const char* UPLOAD_WATCH_USAGE = "benchmarkr upload-watch [Flags]";
 
 
-static const char* INTERVAL_SHORT_EXTERNAL = "-i";
-static const char* INTERVAL_EXTERNAL = "--interval";
-static const char* INTERVAL_INTERNAL = "BM_INTERVAL";
-
-static const char* LOG_LEVEL_SHORT_EXTERNAL = "-l";
-static const char* LOG_LEVEL_EXTERNAL = "--log-level";
-static const char* LOG_LEVEL_INTERNAL = "BM_LOG_LEVEL";
-
-static const char* HELP_TEXT = R"(
-Upload all results to the remote elastic server at a given interval.
-
-Usage
-  benchmarkr upload-watch [FLAGS]
-
-SHORT FLAG, FLAG, ENVIRONMENT VAR
-  -e, --elastic-origin, BM_ELASTIC_ORIGIN  Elasticsearch origin
-  -a, --auth-type     , BM_AUTH_TYPE       Elasticsearch auth type
-  -u, --username      , BM_USERNAME        ELK Username
-  -p, --password      , BM_PASSWORD        ELK Password
-  -b, --bm-dir        , BM_DIR             Benchmarkr Directory to create the global test context in
-  -i, --interval      , BM_INTERVAL        Time between checking the results folder
-  -l, --log-level     , BM_LOG_LEVEL       Application log level
-
-)";
-
-
-const char *benchmarkr::UploadWatch::help() const {
-  return HELP_TEXT;
+static benchmarkr::CommandVariableResolver variable_resolver(int argc, char **argv) {
+  return benchmarkr::CommandVariableResolverBuilder()
+      .with_usage(UPLOAD_WATCH_USAGE)
+      .with_description(UPLOAD_WATCH_DESCRIPTION)
+      .with_elastic_origin()
+      .with_auth_type()
+      .with_username()
+      .with_password()
+      .with_benchmarkr_dir()
+      .with_interval()
+      .with_log_level()
+      .build(argc, argv);
 }
 
-static benchmarkr::VariableResolver resolver(int argc, char** argv) {
-  benchmarkr::VariableResolver variable_resolver;
 
-  std::unique_ptr<benchmarkr::DefaultResolver> default_resolver =
-      std::make_unique<benchmarkr::DefaultResolver>();
-  default_resolver->set_default(INTERVAL_EXTERNAL, "60");
-  default_resolver->set_default(LOG_LEVEL_INTERNAL, "disabled");
-
-  std::unique_ptr<benchmarkr::EnvironmentResolver> environment_resolver =
-      std::make_unique<benchmarkr::EnvironmentResolver>();
-
-  std::unique_ptr<benchmarkr::CLIArgs> cli_args =
-      std::make_unique<benchmarkr::CLIArgs>();
-  cli_args->add_arg(benchmarkr::CLIArg(INTERVAL_SHORT_EXTERNAL, INTERVAL_EXTERNAL, INTERVAL_INTERNAL));
-  cli_args->add_arg(benchmarkr::CLIArg(LOG_LEVEL_SHORT_EXTERNAL, LOG_LEVEL_EXTERNAL, LOG_LEVEL_INTERNAL));
-  cli_args->parse(argc - 1, argv + 1);
-
-  variable_resolver.push_back(std::move(cli_args));
-  variable_resolver.push_back(std::move(environment_resolver));
-  variable_resolver.push_back(std::move(default_resolver));
-
-  return variable_resolver;
+std::string benchmarkr::UploadWatch::help() const {
+  return variable_resolver(0, nullptr).help();
 }
+
 
 [[noreturn]] void benchmarkr::UploadWatch::execute(int argc, char **argv) const {
-  benchmarkr::VariableResolver variable_resolver = resolver(argc, argv);
+  // get the variable resolver
+  benchmarkr::CommandVariableResolver resolver = variable_resolver(argc - 1, argv + 1);
+
   benchmarkr::Upload upload;
 
-  benchmarkr::set_log_level(variable_resolver.to_str(LOG_LEVEL_INTERNAL));
+  benchmarkr::set_log_level(resolver.log_level());
 
-  unsigned int interval = variable_resolver.to_int(INTERVAL_INTERNAL);
+  unsigned int interval = resolver.interval();
 
   unsigned int start = std::chrono::duration_cast< std::chrono::seconds >(
       std::chrono::system_clock::now().time_since_epoch()).count();

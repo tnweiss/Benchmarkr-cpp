@@ -12,7 +12,7 @@ namespace benchmarkr {
 class PrintVersion: public benchmarkr::Command {
  public:
   void execute(int argc, char* argv[]) const final;
-  [[nodiscard]] const char* help() const final;
+  [[nodiscard]] std::string help() const final;
 };
 
 }

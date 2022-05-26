@@ -9,10 +9,14 @@
 
 namespace benchmarkr {
 
+std::string create_index_name();
+std::string create_index_pattern_name();
+std::string create_dashboard_name();
+
 class Init: public benchmarkr::Command {
  public:
   void execute(int argc, char* argv[]) const final;
-  [[nodiscard]] const char* help() const final;
+  [[nodiscard]] std::string help() const final;
 };
 
 }

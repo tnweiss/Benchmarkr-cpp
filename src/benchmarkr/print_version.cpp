@@ -9,7 +9,7 @@ void benchmarkr::PrintVersion::execute(int argc, char **argv) const {
   std::cout << BENCHMARKR_VERSION << std::endl;
 }
 
-const char *benchmarkr::PrintVersion::help() const {
-  return "Print the client version";
+std::string benchmarkr::PrintVersion::help() const {
+  return "Description\n  Print the client version";
 }
 
