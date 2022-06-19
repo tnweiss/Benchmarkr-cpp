@@ -28,9 +28,36 @@ And then our table, gave us some insight into individual results that could then
 ## Related Benchmarkr Projects
 
 - [Benchmarkr Jetbrains Plugin](https://github.com/tnweiss/benchmarkr-jetbrains-plugin) -
-Jetbrains plugin for Intellij and CLION that makes it easier to run individual tests from the gutter
+  Jetbrains plugin for Intellij and CLION that makes it easier to run individual tests from the gutter
 - [Benchmarkr Configuration](https://github.com/tnweiss/benchmarkr-configuration) -
-Centralized configuration for elastic dashboards and indices
+  Centralized configuration for elastic dashboards and indices
+- [Benchmarkr Java](https://github.com/tnweiss/benchmarkr-java) -
+  Java libraries for benchmarkr
+- [Benchmarkr Maven Plugin](https://github.com/tnweiss/benchmarkr-java-maven-plugin) -
+  Benchmarkr plugin for maven
+- [Benchmarkr Gradle Plugin](https://github.com/tnweiss/benchmarkr-java-gradle-plugin) -
+  Benchmarkr plugin for gradle
+
+## Installation
+
+### Ubuntu
+
+To install dev headers, libraries, and benchmarkr on ubuntu run...
+
+```shell
+curl https://raw.githubusercontent.com/tnweiss/Benchmarkr-cpp/v0.0.3/scripts/ubuntu_install.sh | sudo bash
+```
+
+### Macos
+
+```shell
+curl https://raw.githubusercontent.com/tnweiss/Benchmarkr-cpp/v0.0.3/scripts/macos_install.sh | sudo bash
+```
+
+### Windows
+
+Windows frustrates me, so if you use windows I'm just going to assume you'll know how to run this script.
+[Install Script](https://raw.githubusercontent.com/tnweiss/Benchmarkr-cpp/v0.0.3/scripts/windows_install.bat)
 
 ## Project Components
 

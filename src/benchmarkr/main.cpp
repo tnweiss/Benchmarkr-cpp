@@ -7,7 +7,9 @@
 #include "benchmarkr/command.h"
 #include "benchmarkr/help.h"
 #include "benchmarkr/init.h"
-#include "benchmarkr/init-context.h"
+#include "benchmarkr/init_context.h"
+#include "benchmarkr/print_version.h"
+#include "benchmarkr/test_connection.h"
 
 /**
  * Select the proper command given the action command
@@ -24,6 +26,10 @@ static std::unique_ptr<benchmarkr::Command> command(const std::string& action) {
     return std::make_unique<benchmarkr::Upload>();
   } else if (action == "upload-watch") {
     return std::make_unique<benchmarkr::UploadWatch>();
+  } else if (action == "version") {
+    return std::make_unique<benchmarkr::PrintVersion>();
+  } else if (action == "test-connection") {
+    return std::make_unique<benchmarkr::TestConnection>();
   } else {
     return std::make_unique<benchmarkr::Help>();
   }
@@ -54,7 +60,8 @@ int main(int argc, char* argv[]) {
       cmd->execute(argc, argv);
     }
   } catch (std::exception& exception) {
-    std::cerr << exception.what();
+    std::cerr << exception.what() << std::endl << std::endl;
+    std::cerr << "Error executing action " << argv[1] << std::endl;
     exit(1);
   }
 }

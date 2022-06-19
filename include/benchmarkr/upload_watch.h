@@ -5,12 +5,18 @@
 #ifndef BENCHMARKR_INCLUDE_BENCHMARKR_UPLOAD_WATCH_H_
 #define BENCHMARKR_INCLUDE_BENCHMARKR_UPLOAD_WATCH_H_
 
-
-#include "command.h"
-
 #include "nlohmann/json.hpp"
 
+#include "command.h"
+#include "variable_resolver.h"
+
 namespace benchmarkr {
+
+/**
+ * Execute the upload watch
+ * @param resolver
+ */
+[[noreturn]] void executeUploadWatch(const benchmarkr::CommandVariableResolver& resolver);
 
 /**
  * Continuously watch the benchmarkr dir for new test results and upload them the remote elastic server
@@ -18,8 +24,8 @@ namespace benchmarkr {
  */
 class UploadWatch: public Command {
  public:
-  [[noreturn]] void execute(int argc, char* argv[]) const final;
-  [[nodiscard]] const char* help() const final;
+  void execute(int argc, char* argv[]) const final;
+  [[nodiscard]] std::string help() const final;
 };
 
 }

@@ -1,0 +1,83 @@
+# Sourced from https://gist.github.com/NickNaso/0d478f1481686d5bcc868cac06620a60
+name: Ubuntu Build
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+####################################################################
+      - uses: actions/checkout@v3
+      - name: Install dependencies on ubuntu
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build cmake libssl-dev
+          ninja --version
+          cmake --version
+          gcc --version
+      - name: Configure
+        shell: bash
+        run: |
+          mkdir install
+          mkdir build
+          cmake \
+            -S . \
+            -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DSKIP_BENCHMARKR_TESTS=true \
+            -DCMAKE_INSTALL_PREFIX:PATH=install
+      - name: Build
+        shell: bash
+        run: cmake --build build
+      - name: Install
+        shell: bash
+        run: cmake --install build --strip
+      - name: Package
+        shell: bash
+        run: |
+          cp /usr/lib/x86_64-linux-gnu/libssl.so.1.1 install/lib/
+          cp /usr/lib/x86_64-linux-gnu/libcrypto.so.1.1 install/lib/
+          tar -czvf ubuntu.tar.gz install
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ubuntu.tar.gz
+          path: ubuntu.tar.gz
+          retention-days: 1
+####################################################################
+      - name: Upload
+        uses: actions/upload-release-asset@v1
+        if: github.event.action == 'published'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./ubuntu.tar.gz
+          asset_name: ubuntu.tar.gz
+          asset_content_type: application/gzip
+
+  install:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@master
+        with:
+          name: ubuntu.tar.gz
+          path: .
+      - name: Install
+        shell: bash
+        run: |
+          cp ubuntu.tar.gz /tmp/
+          chmod +x ./scripts/ubuntu_install.sh
+          export SKIP_DOWNLOAD="yes" 
+          cat ./scripts/ubuntu_install.sh | sudo bash
+          benchmarkr version

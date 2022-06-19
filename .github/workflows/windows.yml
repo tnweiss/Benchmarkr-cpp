@@ -1,0 +1,78 @@
+# Sourced from https://gist.github.com/NickNaso/0d478f1481686d5bcc868cac06620a60
+name: Windows Build
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+####################################################################
+      - uses: actions/checkout@v3
+      - name: Install dependencies on windows
+        run: |
+          choco install ninja cmake 7zip
+          cmd "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
+      - name: Configure
+        shell: bash
+        run: |
+          mkdir install
+          mkdir build
+          cmake \
+            -S . \
+            -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DSKIP_BENCHMARKR_TESTS=true \
+            -DCMAKE_INSTALL_PREFIX:PATH=install
+      - name: Build
+        shell: bash
+        run: cmake --build build --config Release
+      - name: Install
+        shell: bash
+        run: cmake --install build --strip --config Release
+      - name: Package
+        shell: bash
+        run: |
+          7z a windows.zip install
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: windows.zip
+          path: windows.zip
+          retention-days: 1
+####################################################################
+      - name: Upload
+        uses: actions/upload-release-asset@v1
+        if: github.event.action == 'published'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./windows.zip
+          asset_name: windows.zip
+          asset_content_type: application/zip
+####################################################################
+  install:
+    needs:
+      - build
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@master
+        with:
+          name: windows.zip
+          path: .
+      - name: Install
+        shell: pwsh
+        run: |
+          xcopy windows.zip "C:\Windows\Temp\"
+          choco install wget 7z
+          ./scripts/windows_install.bat Skip-Download
+          $Env:Path += ';C:\Program Files (x86)\benchmarkr\bin'
+          benchmarkr version

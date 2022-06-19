@@ -1,6 +1,6 @@
 ####### Project ##########
 cmake_minimum_required (VERSION 3.5)
-project(benchmarkr VERSION 0.0.2)
+project(benchmarkr VERSION 0.0.3)
 set(BENCHMARKR_COMMON_LIBRARY benchmarkrCommon)
 set(BENCHMARKR_DEV_LIBRARY benchmarkrDev)
 set(BENCHMARKR_EXECUTABLE benchmarkr)
@@ -44,7 +44,9 @@ configure_file(
 add_subdirectory(src)
 
 # If the project is not a submodule, add the test directory
-if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+if(NOT (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME}))
+elseif(${SKIP_BENCHMARKR_TESTS})
+else()
     add_subdirectory(test)
 endif()
 

@@ -1,0 +1,82 @@
+# Sourced from https://gist.github.com/NickNaso/0d478f1481686d5bcc868cac06620a60
+name: Macos Build
+
+on:
+  push:
+    branches:
+      - '*'
+      - '!master'
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+####################################################################
+      - uses: actions/checkout@v3
+      - name: Install dependencies on macos
+        run: |
+          brew install p7zip cmake ninja ossp-uuid
+          ninja --version
+          cmake --version
+      - name: Configure
+        shell: bash
+        run: |
+          mkdir install
+          mkdir build
+          cmake \
+            -S . \
+            -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DSKIP_BENCHMARKR_TESTS=true \
+            -DCMAKE_INSTALL_PREFIX:PATH=install
+      - name: Build
+        shell: bash
+        run: |
+          ls /usr/local/lib | grep uuid
+          cmake --build build
+      - name: Install
+        shell: bash
+        run: cmake --install build --strip
+      - name: Package
+        shell: bash
+        run: |
+          cp /usr/local/opt/ossp-uuid/lib/libuuid.16.dylib install/lib/
+          tar -czvf macos.tar.gz install
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: macos.tar.gz
+          path: macos.tar.gz
+          retention-days: 1
+####################################################################
+      - name: Upload
+        uses: actions/upload-release-asset@v1
+        if: github.event.action == 'published'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./macos.tar.gz
+          asset_name: macos.tar.gz
+          asset_content_type: application/gzip
+
+  install:
+    needs:
+      - build
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/download-artifact@master
+        with:
+          name: macos.tar.gz
+          path: .
+      - name: Install
+        shell: bash
+        run: |
+          cp macos.tar.gz /tmp/
+          chmod +x ./scripts/macos_install.sh
+          export SKIP_DOWNLOAD="yes" 
+          cat ./scripts/macos_install.sh | sudo bash
+          benchmarkr version

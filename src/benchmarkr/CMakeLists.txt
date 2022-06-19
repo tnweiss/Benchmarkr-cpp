@@ -7,7 +7,10 @@ add_executable(benchmarkr
         upload.cpp
         command.cpp
         upload_watch.cpp
-        init-context.cpp
+        print_version.cpp
+        init_context.cpp
+        test_connection.cpp
+        variable_resolver.cpp
 )
 
 # link to dependencies

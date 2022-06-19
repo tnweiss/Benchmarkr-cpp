@@ -4,8 +4,8 @@
 
 //////////////////////////// Linux /////////////////////////////
 
-#ifdef unix
 
+#if defined(__linux__)
 #include "benchmarkr-common/system.h"
 
 #include "unistd.h"

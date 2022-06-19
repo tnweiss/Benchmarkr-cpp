@@ -10,3 +10,5 @@ include/benchmarkr-dev/version.h
 
 include/benchmarkr-common/benchmarkr/resolver/remote_config.h
 src/benchmarkr-common/benchmarkr/resolver/remote_config.cpp
+
+!build.yml

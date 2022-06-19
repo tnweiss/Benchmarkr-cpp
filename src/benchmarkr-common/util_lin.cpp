@@ -2,7 +2,7 @@
 // Created by tyler on 2/28/22.
 //
 
-#ifdef __linux__
+#if defined(__linux__) || defined(__APPLE__)
 
 #include "benchmarkr-common/util.h"
 
