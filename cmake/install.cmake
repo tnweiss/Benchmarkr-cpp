@@ -32,8 +32,9 @@ if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
             PATTERN *.h)
 endif()
 
+
 ########## Install all Libraries ##########
-install(TARGETS benchmarkrDev spdlog elkClient cpr libcurl zlib
+install(TARGETS benchmarkrDev spdlog elkClient cpr libcurl zlib benchmarkr
         EXPORT benchmarkrTargets
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
         RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

@@ -6,10 +6,15 @@
 #define BENCHMARKR_INCLUDE_BENCHMARKR_TEST_CONNECTION_H_
 
 #include "command.h"
+#include "variable_resolver.h"
 
 namespace benchmarkr {
 
-const char* help_text();
+/**
+ * Execute the test connection command
+ * @param resolver
+ */
+void executeTestConnection(const CommandVariableResolver& resolver);
 
 class TestConnection: public Command {
  public:

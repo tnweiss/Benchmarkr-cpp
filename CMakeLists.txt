@@ -44,7 +44,9 @@ configure_file(
 add_subdirectory(src)
 
 # If the project is not a submodule, add the test directory
-if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+if(NOT (${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME}))
+elseif(${SKIP_BENCHMARKR_TESTS})
+else()
     add_subdirectory(test)
 endif()
 

@@ -9,6 +9,12 @@
 
 namespace benchmarkr {
 
+/**
+ * Get the application help text
+ * @return
+ */
+const char* help_text();
+
 class Help: public Command {
  public:
   void execute(int argc, char* argv[]) const final;

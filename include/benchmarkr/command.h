@@ -5,6 +5,8 @@
 #ifndef BENCHMARKR_SRC_BENCHMARKR_COMMANDS_COMMAND_H_
 #define BENCHMARKR_SRC_BENCHMARKR_COMMANDS_COMMAND_H_
 
+#include "benchmarkr-common/resolver/resolver.h"
+
 namespace benchmarkr {
 
 class Command {
@@ -12,7 +14,7 @@ class Command {
   /**
    * Run the command
    */
-  virtual void execute(int argc, char* argv[]) const = 0 ;
+  virtual void execute(int argc, char* argv[]) const = 0;
 
   /**
    * Get help text for the given command

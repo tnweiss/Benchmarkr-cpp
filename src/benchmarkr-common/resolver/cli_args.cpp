@@ -99,6 +99,8 @@ void benchmarkr::CLIArgs::parse(int argc, char **argv) {
 
     for (auto & arg: _args) {
       // try to resolve the argument
+      spdlog::debug(found);
+      spdlog::debug(arg.second.key());
       found = found || arg.second.set(&argI, argc, argv);
     }
 

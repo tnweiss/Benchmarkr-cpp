@@ -17,7 +17,6 @@ static benchmarkr::CommandVariableResolver variable_resolver(int argc, char **ar
       .with_usage(UPLOAD_WATCH_USAGE)
       .with_description(UPLOAD_WATCH_DESCRIPTION)
       .with_elastic_origin()
-      .with_auth_type()
       .with_username()
       .with_password()
       .with_benchmarkr_dir()
@@ -32,22 +31,24 @@ std::string benchmarkr::UploadWatch::help() const {
 }
 
 
-[[noreturn]] void benchmarkr::UploadWatch::execute(int argc, char **argv) const {
+void benchmarkr::UploadWatch::execute(int argc, char **argv) const {
   // get the variable resolver
   benchmarkr::CommandVariableResolver resolver = variable_resolver(argc - 1, argv + 1);
 
-  benchmarkr::Upload upload;
-
   benchmarkr::set_log_level(resolver.log_level());
 
+  benchmarkr::executeUploadWatch(resolver);
+}
+
+[[noreturn]] void benchmarkr::executeUploadWatch(const benchmarkr::CommandVariableResolver& resolver) {
   unsigned int interval = resolver.interval();
 
   unsigned int start = std::chrono::duration_cast< std::chrono::seconds >(
       std::chrono::system_clock::now().time_since_epoch()).count();
 
   while (true) {
-    // run the upload command
-    upload.execute(argc, argv);
+    // execute the upload command
+    benchmarkr::executeUpload(resolver);
 
     // get the end
     unsigned int end = std::chrono::duration_cast< std::chrono::seconds >(
@@ -56,7 +57,7 @@ std::string benchmarkr::UploadWatch::help() const {
     // notify user of sleeping
 
     std::cout << "-----------------------------------" << std::endl << "Sleeping " << interval - (end - start) <<
-      " seconds ..." << std::endl << "-----------------------------------" << std::endl;
+              " seconds ..." << std::endl << "-----------------------------------" << std::endl;
     std::this_thread::sleep_for(std::chrono::seconds (interval - (end - start)));
 
     start = std::chrono::duration_cast< std::chrono::seconds >(

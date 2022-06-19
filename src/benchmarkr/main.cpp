@@ -60,7 +60,8 @@ int main(int argc, char* argv[]) {
       cmd->execute(argc, argv);
     }
   } catch (std::exception& exception) {
-    std::cerr << exception.what();
+    std::cerr << exception.what() << std::endl << std::endl;
+    std::cerr << "Error executing action " << argv[1] << std::endl;
     exit(1);
   }
 }

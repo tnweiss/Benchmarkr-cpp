@@ -1,7 +1,6 @@
 #include "spdlog/spdlog.h"
 #include "nlohmann/json.hpp"
 
-#include "elk/common/authentication.h"
 #include "elk/elasticsearch/elasticsearch_client.h"
 #include "elk/kibana/kibana_client.h"
 
@@ -41,23 +40,6 @@ static benchmarkr::CommandVariableResolver variable_resolver(int argc, char **ar
       .build(argc, argv);
 }
 
-static elk::ElkAuthentication authentication(benchmarkr::CommandVariableResolver& resolver) {
-  if (resolver.auth_type() == "basic") {
-    // collect username and passwords from the variables
-    std::string username = resolver.username();
-    std::string password = resolver.password();
-
-    // log for debugging
-    spdlog::debug("Initializing {0} auth with ({1}, {2})", resolver.auth_type(), username, password);
-
-    return {username.c_str(), password.c_str()};
-  } else {
-    spdlog::info("No auth handler for {0}", resolver.auth_type());
-
-    return {};
-  }
-}
-
 std::string benchmarkr::Init::help() const {
   return variable_resolver(0, nullptr).help();
 }
@@ -67,6 +49,10 @@ void benchmarkr::Init::execute(int argc, char **argv) const {
 
   benchmarkr::set_log_level(resolver.log_level());
 
+  benchmarkr::executeInit(resolver);
+}
+
+void benchmarkr::executeInit(const benchmarkr::CommandVariableResolver& resolver) {
   // get the index data from the remote file config
   nlohmann::json index_json = nlohmann::json::parse(resolver.index_json());
 

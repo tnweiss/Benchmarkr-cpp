@@ -5,10 +5,10 @@
 #ifndef BENCHMARKR_INCLUDE_BENCHMARKR_UPLOAD_H_
 #define BENCHMARKR_INCLUDE_BENCHMARKR_UPLOAD_H_
 
-#include "benchmarkr-common/resolver/resolver.h"
-#include "command.h"
-
 #include "nlohmann/json.hpp"
+
+#include "variable_resolver.h"
+#include "command.h"
 
 namespace benchmarkr {
 
@@ -17,6 +17,12 @@ namespace benchmarkr {
  * @param file_path
  */
 std::vector<nlohmann::json> parse_results(const std::string& results_file_path, nlohmann::json& global_ctx);
+
+/**
+ * Execute the command
+ * @param resolver
+ */
+void executeUpload(const benchmarkr::CommandVariableResolver& resolver);
 
 class Upload: public Command {
  public:

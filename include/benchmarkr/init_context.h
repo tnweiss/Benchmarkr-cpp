@@ -9,6 +9,11 @@
 
 namespace benchmarkr {
 
+/**
+ * Execute the initialize context command
+ */
+void executeInitContext(const CommandVariableResolver&);
+
 class InitContext: public Command {
  public:
   void execute(int argc, char* argv[]) const final;

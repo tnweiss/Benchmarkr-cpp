@@ -34,10 +34,14 @@ void benchmarkr::InitContext::execute(int argc, char **argv) const {
 
   benchmarkr::set_log_level(resolver.log_level());
 
+  benchmarkr::executeInitContext(resolver);
+}
+
+void benchmarkr::executeInitContext(const CommandVariableResolver& resolver) {
   // initialize the context and write to a file
   benchmarkr::GlobalTestContext(resolver.benchmarkr_dir()).
-    init().
-    writeToFile();
+      init().
+      writeToFile();
 
   // notify success
   std::cout << "Done" << std::endl;

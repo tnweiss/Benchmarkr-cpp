@@ -1,7 +1,5 @@
-#include "spdlog/spdlog.h"
 #include "nlohmann/json.hpp"
 
-#include "elk/common/authentication.h"
 #include "elk/elasticsearch/elasticsearch_client.h"
 
 #include "benchmarkr-common/global_test_context.h"
@@ -18,31 +16,12 @@ static benchmarkr::CommandVariableResolver variable_resolver(int argc, char **ar
   return benchmarkr::CommandVariableResolverBuilder()
       .with_usage(UPLOAD_USAGE)
       .with_description(UPLOAD_DESCRIPTION)
-      .with_auth_type()
       .with_username()
       .with_password()
       .with_benchmarkr_dir()
       .with_log_level()
+      .with_elastic_origin()
       .build(argc, argv);
-}
-
-static elk::ElkAuthentication authentication(benchmarkr::CommandVariableResolver& resolver) {
-  std::string auth_type = resolver.auth_type();
-
-  if (auth_type == "basic") {
-    // collect username and passwords from the variables
-    std::string username = resolver.username();
-    std::string password = resolver.password();
-
-    // log for debugging
-    spdlog::debug("Initializing {0} auth with ({1}, {2})", auth_type, username, password);
-
-    return {username.c_str(), password.c_str()};
-  } else {
-    spdlog::info("No auth handler for {0}", auth_type);
-
-    return {};
-  }
 }
 
 std::string benchmarkr::Upload::help() const {
@@ -55,6 +34,10 @@ void benchmarkr::Upload::execute(int argc, char **argv) const {
 
   benchmarkr::set_log_level(resolver.log_level());
 
+  benchmarkr::executeUpload(resolver);
+}
+
+void benchmarkr::executeUpload(const benchmarkr::CommandVariableResolver &resolver) {
   // get the authentication
   auto elk_auth = authentication(resolver);
 
@@ -69,9 +52,14 @@ void benchmarkr::Upload::execute(int argc, char **argv) const {
   std::cout << "  Target Elastic Server : " << elastic_origin << std::endl;
 
   // get the cluster details and log
-  auto cluster_details = elasticsearch_client.get_cluster_details();
-  std::cout << "  Target Cluster Name      : " << cluster_details.name() << std::endl;
-  std::cout << "  Target Cluster Version   : " << cluster_details.version().number() << std::endl << std::endl << std::endl;
+  try {
+    auto cluster_details = elasticsearch_client.get_cluster_details();
+    std::cout << "  Target Cluster Name      : " << cluster_details.name() << std::endl;
+    std::cout << "  Target Cluster Version   : " << cluster_details.version().number() << std::endl << std::endl << std::endl;
+  } catch (std::exception& ex) {
+    std::cerr << "Error connecting to target cluster, this may cause issues uploading result sets." <<
+      std::endl << std::endl << ex.what();
+  }
 
   // load global context
   benchmarkr::GlobalTestContext global_test_context(resolver.benchmarkr_dir());
@@ -104,7 +92,6 @@ void benchmarkr::Upload::execute(int argc, char **argv) const {
     }
   }
 }
-
 
 std::vector<nlohmann::json> benchmarkr::parse_results(const std::string& results_file_path, nlohmann::json& global_ctx) {
   // temporary variables to parse the text file

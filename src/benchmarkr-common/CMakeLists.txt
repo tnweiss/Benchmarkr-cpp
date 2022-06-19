@@ -4,6 +4,7 @@ add_library(benchmarkrCommon
         system.cpp
         system_lin.cpp
         system_win.cpp
+        system_mac.cpp
 
         util.cpp
         util_lin.cpp

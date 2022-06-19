@@ -1,9 +1,11 @@
+#include "benchmarkr/test_connection.h"
+
 #include <elk/common/authentication.h>
 #include <elk/elasticsearch/elasticsearch_client.h>
 #include <elk/kibana/models/saved_object_type.h>
 #include <elk/kibana/kibana_client.h>
 #include "benchmarkr/variable_resolver.h"
-#include "benchmarkr/test_connection.h"
+
 #include "benchmarkr/init.h"
 
 static const char* TEST_CONNECTION_DESCRIPTION = "Test connection to the remote elastic and report index status.";
@@ -18,32 +20,12 @@ static benchmarkr::CommandVariableResolver variable_resolver(int argc, char **ar
       .with_kibana_origin()
       .with_username()
       .with_password()
-      .with_auth_type()
       .with_log_level()
       .build(argc, argv);
 }
 
-
 std::string benchmarkr::TestConnection::help() const {
   return variable_resolver(0, nullptr).help();
-}
-
-
-static elk::ElkAuthentication authentication(benchmarkr::CommandVariableResolver& resolver) {
-  if (resolver.auth_type() == "basic") {
-    // collect username and passwords from the variables
-    std::string username = resolver.username();
-    std::string password = resolver.password();
-
-    // log for debugging
-    spdlog::debug("Initializing {0} auth with ({1}, {2})", resolver.auth_type(), username, password);
-
-    return {username.c_str(), password.c_str()};
-  } else {
-    spdlog::info("No auth handler for {0}", resolver.auth_type());
-
-    return {};
-  }
 }
 
 void benchmarkr::TestConnection::execute(int argc, char **argv) const {
@@ -52,6 +34,10 @@ void benchmarkr::TestConnection::execute(int argc, char **argv) const {
 
   benchmarkr::set_log_level(resolver.log_level());
 
+  benchmarkr::executeTestConnection(resolver);
+}
+
+void benchmarkr::executeTestConnection(const CommandVariableResolver& resolver) {
   // get the authentication
   auto elk_auth = authentication(resolver);
 

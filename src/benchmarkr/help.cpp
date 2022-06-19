@@ -1,5 +1,3 @@
-#include <benchmarkr/test_connection.h>
-
 #include "benchmarkr/help.h"
 
 static const char* HELP_TEXT = R"(
@@ -20,11 +18,6 @@ Flags
 
 )";
 
-
-const char* benchmarkr::help_text() {
-  return HELP_TEXT;
-}
-
 void benchmarkr::Help::execute(int argc, char* argv[]) const {
   if (std::strcmp(argv[1], "help") != 0) {
     std::cout << std::endl << "Unrecognized Command '" << argv[1] << "'";
@@ -34,5 +27,9 @@ void benchmarkr::Help::execute(int argc, char* argv[]) const {
 }
 
 std::string benchmarkr::Help::help() const {
+  return HELP_TEXT;
+}
+
+const char* benchmarkr::help_text() {
   return HELP_TEXT;
 }
